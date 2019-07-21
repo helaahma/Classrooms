@@ -8,8 +8,17 @@
   <div class="card-body">
     <h5 class="card-title" style="color: 000034;">{{classroom.name}} {{classroom.subject}}</h5>
     <p class="card-text" style="color: 000034;">{{classroom.year}}</p>
+    {% for students in student %}
+    {{students.name}}
+	{{students.date_of_birth}}
+	{{students.gender}}
+	{{students.exame_grade}}
+	{% endfor %}
+	
+
     <a href="{% url 'classroom-update' classroom.id %}" class="btn" style="background-color: #000034; color: white;">Update</a>
     <a href="{% url 'classroom-delete' classroom.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
+
   </div>
 </div>
 
