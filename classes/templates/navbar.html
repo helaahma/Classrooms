@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="{% url 'restaurant-list' %}">RestaurantHUB</a>
+  <a class="navbar-brand" href="{% url 'classroom-list' %}">List</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,21 +8,21 @@
     <ul class="navbar-nav mr-auto">
       {% if request.user.is_authenticated %}
       <li class="nav-item">
-        <p> {{request.user.first_name}} {{request.user.last_name}}</p>
+        <p> {{request.classroom.name}}</p>
 
         <a class="nav-link" href="{% url 'signout' %}">Signout</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'restaurant-create' %}">Create Restaurant</a>
+        <a class="nav-link my-auto" href="{% url 'classroom-create' %}">Create Classroom</a>
       </li>
       {% else %}
 
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+        <a class="nav-link my-center" href="{% url 'signup' %}">Signup</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'signin' %}">Signin</a>
+        <a class="nav-link my-center" href="{% url 'signin' %}">Signin</a>
       </li>
       {% endif %}      
 

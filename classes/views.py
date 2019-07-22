@@ -1,23 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from .forms import ClassroomForm, SigninForm, SignupForm
-from .models import Classroom
+from .forms import ClassroomForm, SigninForm, SignupForm, StudentForm
+from .models import Classroom, Student
 
 
 def classroom_list(request):
     classrooms = Classroom.objects.all()
     context = {
-        "classrooms": classrooms,
+        "classroom": classrooms,
     }
     return render(request, 'classroom_list.html', context)
 
 
 def classroom_detail(request, classroom_id):
-    classroom = Classroom.objects.get(id=classroom_id)
-    context = {
-        "classroom": classroom,
+    clas= Classroom.objects.get(id= classroom_id)
+    students= Student.objects.filter(classroom=clas)
+    context= {
+    "classroom":clas,
+    "students": students,
     }
+    
     return render(request, 'classroom_detail.html', context)
 
 
@@ -31,7 +34,7 @@ def classroom_create(request):
                 classr.teacher = request.user
                 classr.save()
                 messages.success(request, "Successfully Created!")
-                return redirect('classroom-list')
+                return redirect('signin')
             print (form.errors)
         context = {
         "form": form,
@@ -44,7 +47,7 @@ def classroom_update(request, classroom_id):
     classroom = Classroom.objects.get(id=classroom_id)
     form = ClassroomForm(instance=classroom)
     if request.method == "POST":
-        form = ClassroomForm(request.POST, request.FILES or None, instance=classroom)
+        form = ClassroomForm(request.POST, (request.FILES or None), instance=classroom)
         if form.is_valid():
             form.save()
             messages.success(request, "Successfully Edited!")
@@ -62,7 +65,7 @@ def classroom_delete(request, classroom_id):
     messages.success(request, "Successfully Deleted!")
     return redirect('classroom-list')
 
-def signin(request):
+def sign_in(request):
     form = SigninForm()
     if request.method == 'POST':
         form = SigninForm(request.POST)
@@ -76,9 +79,9 @@ def signin(request):
                 login(request, auth_user)
                 return redirect('classroom-list')
     context = {
-        "form":form
+        "form":form,
     }
-    return render(request, 'signin.html', context)
+    return render(request,'signin.html', context)
 
 def classroom_signup(request):
     form = SignupForm()
@@ -100,16 +103,29 @@ def classroom_signup(request):
 
 
 def classroom_signout(request):
-    logout(request,user)
-    return redirect("signin")
+    logout(request)
+    return redirect('signin')
 
 
 
 def add_student(request, classroom_id):
-    students= Student.objects.filter(id=classroom_id).order_by('name', 'exam_grade')
-    context= {
-    "student": students
-    }
-    return render (request, "classroom_detail.html", context)
+    
+    classroom= Classroom.objects.get(id=classroom_id)
+    form = StudentForm()
+  
+    if request.method == "POST":
+
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.classroom = classroom
+            student.save()
+            return redirect('classroom-detail', classroom_id)
+    context = {
+        "form":form,
+        "classroom": classroom ,
+        }
+    return render (request, "student_add.html", context)
+
 
 
