@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="row">
-	{% for classrooms in classroom %}
+	{% for classrooms in request.user.classrooms.all %}
 <div class="col-sm-4">
 	<div class="card">
 		<div class="card-body">

@@ -7,7 +7,7 @@ class Classroom(models.Model):
     name = models.CharField(max_length=120)
     subject = models.CharField(max_length=120)
     year = models.IntegerField()
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name="classrooms")
 
     def get_absolute_url(self):
         return reverse('classroom-detail', kwargs={'classroom_id':self.id})
@@ -28,5 +28,5 @@ class Student(models.Model):
         choices= GENDER,
         default="NA",)
 
-    exame_grade = models.CharField(max_length=2)
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    exam_grade = models.CharField(max_length=2)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name="students")

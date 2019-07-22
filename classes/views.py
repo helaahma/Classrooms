@@ -6,19 +6,17 @@ from .models import Classroom, Student
 
 
 def classroom_list(request):
-    classrooms = Classroom.objects.all()
-    context = {
-        "classroom": classrooms,
-    }
-    return render(request, 'classroom_list.html', context)
+    return render(request, 'classroom_list.html')
 
 
 def classroom_detail(request, classroom_id):
     clas= Classroom.objects.get(id= classroom_id)
-    students= Student.objects.filter(classroom=clas)
+    clas.students.all()
+    students= Student.objects.filter(classroom=clas).order_by('name', 'exam_grade')
+    
     context= {
     "classroom":clas,
-    "students": students,
+    "students": students
     }
     
     return render(request, 'classroom_detail.html', context)
@@ -109,7 +107,6 @@ def classroom_signout(request):
 
 
 def add_student(request, classroom_id):
-    
     classroom= Classroom.objects.get(id=classroom_id)
     form = StudentForm()
   
